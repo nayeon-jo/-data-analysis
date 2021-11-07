@@ -2,15 +2,11 @@
 >>> import pandas as pd
 >>> import matplotlib.pyplot as plt
 >>> import seaborn as sns
-Traceback (most recent call last):
-  File "<pyshell#5>", line 1, in <module>
-    import seaborn as sns
-ModuleNotFoundError: No module named 'seaborn'
->>> import seaborn as sns
+
 >>> # Womens Clothing E-Commerce Reviews(수정).csv 데이터를 pandas를 사용하여 dataframe 형태로 불러옵니다.
 df_origin = pd.read_csv("D:\pandas_jny\data\Womens Clothing E-Commerce Reviews(수정).csv")
->>> 
->>> 
+
+
 >>> # 5개의 데이터 샘플을 출력합니다.
 df_origin.head()
    Unnamed: 0  Unnamed: 0.1  ...  Department Name  Class Name
@@ -21,6 +17,7 @@ df_origin.head()
 4           4             4  ...             Tops     Blouses
 
 [5 rows x 12 columns]
+
 >>> # dataframe의 정보를 요약해서 출력합니다.
 df_origin.info()
 <class 'pandas.core.frame.DataFrame'>
@@ -42,6 +39,7 @@ Data columns (total 12 columns):
  11  Class Name               23472 non-null  object
 dtypes: int64(7), object(5)
 memory usage: 2.2+ MB
+  
 >>> # 수치형 변수의 데이터 정보를 요약하여 출력합니다.
 df_origin.describe()
          Unnamed: 0  Unnamed: 0.1  ...  Recommended IND  Positive Feedback Count
@@ -59,6 +57,7 @@ max    23485.000000  23485.000000  ...         1.000000               122.000000
 >>> 
 >>> # 결측값을 처리하기 전에 우선 의미 없는 변수인 'Unnamed: 0, Unnamed: 0.1'를 drop을 사용하여 삭제합니다.
 df_clean = df_origin.drop(columns = ['Unnamed: 0', 'Unnamed: 0.1'])
+
 >>> # 결측값 정보를 출력합니다.
 df_clean.isnull().sum()
 Clothing ID                   0
@@ -72,7 +71,7 @@ Division Name                14
 Department Name              14
 Class Name                   14
 dtype: int64
->>> 
+
 >>> # 아래 3개의 변수들의 결측값 정보를 알아보고 싶어서 그 데이터들을 출력합니다.
 df_clean[df_clean['Division Name'].isnull()]
        Clothing ID  Age  ... Department Name Class Name
@@ -92,8 +91,13 @@ df_clean[df_clean['Division Name'].isnull()]
 23011          136   36  ...             NaN        NaN
 
 [14 rows x 10 columns]
+
+
+
+##결측값 처리
 >>> # 결측값이 아닌 부분을 골라내어 df_clasn에 저장합니다.
 df_clean = df_clean[~df_clean['Review Text'].isnull()]
+
 >>> # 결측값 정보를 출력합니다.
 df_clean.isnull().sum()
 Clothing ID                   0
@@ -107,93 +111,58 @@ Division Name                13
 Department Name              13
 Class Name                   13
 dtype: int64
+  
+  
+  
+  ##데이터 시각화
 >>> import nltk
-Traceback (most recent call last):
-  File "<pyshell#21>", line 1, in <module>
-    import nltk
-ModuleNotFoundError: No module named 'nltk'
->>> import nltk
->>> from nltk.corpus import stopwords
-from nltk import sent_tokenize, word_tokenize
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-from collections import Counter
-from nltk.tokenize import RegexpTokenizer
-import re
-SyntaxError: multiple statements found while compiling a single statement
 >>> from nltk.corpus import stopwords
 >>> from nltk import sent_tokenize, word_tokenize
->>> from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-Traceback (most recent call last):
-  File "<pyshell#26>", line 1, in <module>
-    from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-ModuleNotFoundError: No module named 'wordcloud'
->>> from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-Traceback (most recent call last):
-  File "<pyshell#27>", line 1, in <module>
-    from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-ModuleNotFoundError: No module named 'wordcloud'
 >>> from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 >>> from collections import Counter
 >>> from nltk.tokenize import RegexpTokenizer
 >>> import re
->>> # 'Title'의 결측값을 삭제합니다.
-df_clean_title = df_clean[~df_clean['Title'].isnull()]
 
-# findall 함수를 사용하여 띄어 쓰기 단위로 글자만을 가져옵니다.(소문자로 변환도 수행)
-tokens = re.findall("[\w']+", df_clean_title['Title'].str.lower().str.cat(sep=' '))
->>> # nltk에서 지원하는 'stopwords'를 다운받습니다.
-nltk.download('stopwords')
-[nltk_data] Downloading package stopwords to
-[nltk_data]     C:\Users\i\AppData\Roaming\nltk_data...
-[nltk_data]   Unzipping corpora\stopwords.zip.
-True
->>> # 영어 'stopwords'를 가져옵니다.
-en_stops = set(stopwords.words('english'))
 
-# tokens에서 'stopwords'에 해당되지 않는 단어를 골라내어 filtered_sentence에 저장합니다.
-filtered_sentence = [token for token in tokens if not token in en_stops]
-filtered_sentence
->>> filtered_sentence
-Traceback (most recent call last):
-  File "<pyshell#35>", line 1, in <module>
-    filtered_sentence
-NameError: name 'filtered_sentence' is not defined
->>> # 출력 사이즈를 설정합니다.
-plt.rcParams['figure.figsize'] = (16, 16)
-
-# wordcloud를 저장합니다.
-wordcloud = WordCloud(max_font_size=50, max_words=100,background_color="white").generate(' '.join(filtered_sentence))
-
-# wordcloud를 출력합니다.
-plt.imshow(wordcloud,interpolation="bilinear")
-plt.axis("off")
-plt.show()
->>> plt.show()
 >>> # 'Title'의 결측값을 삭제합니다.
 df_clean_title = df_clean[~df_clean['Title'].isnull()]
 >>> # findall 함수를 사용하여 띄어 쓰기 단위로 글자만을 가져옵니다.(소문자로 변환도 수행)
 tokens = re.findall("[\w']+", df_clean_title['Title'].str.lower().str.cat(sep=' '))
+
+>>> # nltk에서 지원하는 'stopwords'를 다운받습니다.
+nltk.download('stopwords')
+
 >>> # 영어 'stopwords'를 가져옵니다.
 en_stops = set(stopwords.words('english'))
 >>> # tokens에서 'stopwords'에 해당되지 않는 단어를 골라내어 filtered_sentence에 저장합니다.
 filtered_sentence = [token for token in tokens if not token in en_stops]
 >>> filtered_sentence
 
+
 >>> # 출력 사이즈를 설정합니다.
 plt.rcParams['figure.figsize'] = (16, 16)
+
 >>> # wordcloud를 저장합니다.
 wordcloud = WordCloud(max_font_size=50, max_words=100,background_color="white").generate(' '.join(filtered_sentence))
+
 >>> # wordcloud를 출력합니다.
 plt.imshow(wordcloud,interpolation="bilinear")
 <matplotlib.image.AxesImage object at 0x000001D586AD5E20>
+
 >>> plt.axis("off")
 (-0.5, 399.5, 199.5, -0.5)
+
 >>> plt.show()
+
+
+
+##Review Text word cloud
 >>> # findall 함수를 사용하여 띄어 쓰기 단위로 글자만을 가져옵니다.(소문자로 변환도 수행)
 tokens = re.findall("[\w']+", df_clean['Review Text'].str.lower().str.cat(sep=' '))
 >>> # tokens에서 'stopwords'에 해당되지 않는 단어를 골라내어 filtered_sentence에 저장합니다.
 filtered_sentence = [token for token in tokens if not token in en_stops]
 >>> filtered_sentence
+
 
 >>> # 출력 사이즈를 설정합니다.
 plt.rcParams['figure.figsize'] = (16, 16)
@@ -205,6 +174,10 @@ plt.imshow(wordcloud,interpolation="bilinear")
 >>> plt.axis("off")
 (-0.5, 399.5, 199.5, -0.5)
 >>> plt.show()
+
+
+
+##Recommended IND 시각화
 >>> # 분포를 막대 그래프를 사용하여 출력합니다.
 df_clean['Recommended IND'].value_counts().plot(kind='bar')
 <AxesSubplot:>
@@ -213,62 +186,59 @@ df_clean['Recommended IND'].value_counts()
 0    18540
 1     4101
 Name: Recommended IND, dtype: int64
->>> from sklearn.feature_extraction.text import TfidfVectorizer
-Traceback (most recent call last):
-  File "<pyshell#58>", line 1, in <module>
-    from sklearn.feature_extraction.text import TfidfVectorizer
-ModuleNotFoundError: No module named 'sklearn'
+    
+    
+    
+    ##데이터 전 처리
 >>> from sklearn.feature_extraction.text import TfidfVectorizer
 >>> # TfidfVectorizer을 불러옵니다. (stop_words 는 영어로 설정)
 vectorizer = TfidfVectorizer(stop_words = 'english')
-
 >>> # 소문자화 'Review Text'데이터를 Tfidf로 변환합니다.
 X = vectorizer.fit_transform(df_clean['Review Text'].str.lower())
+
 >>> # 변환된 X의 크기를 살펴봅니다.
 X.shape
 (22641, 13855)
+
 >>> # 예측해야 할 변수 'Recommended IND' 만을 선택하여 numpy 형태로 y에 저장합니다.
 y = df_clean['Recommended IND']
 >>> y = y.to_numpy().ravel() # 1 차원 벡터 형태로 출력하기 위해 ravel 사용
+
 >>> vectorizer.get_feature_names()
 
-Warning (from warnings module):
-  File "C:\Users\i\AppData\Local\Programs\Python\Python39\lib\site-packages\sklearn\utils\deprecation.py", line 87
-    warnings.warn(msg, category=FutureWarning)
-FutureWarning: Function get_feature_names is deprecated; get_feature_names is deprecated in 1.0 and will be removed in 1.2. Please use get_feature_names_out instead.
 
+
+##학습, 테스트 데이터 분리
 >>> from sklearn.model_selection import train_test_split
 >>> # sklearn에서 제공하는 train_test_split을 사용하여 손 쉽게 분리 할 수 있습니다.
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+
+
+##머신러닝 모델 학습
 >>> from sklearn.tree import DecisionTreeClassifier
 >>> # 의사결정나무 DecisionTreeClassifier class를 가져 옵니다.
 model = DecisionTreeClassifier()
 >>> # fit 함수를 사용하여 데이터를 학습합니다.
 model.fit(x_train, y_train)
 DecisionTreeClassifier()
->>> # score 함수를 사용하여 모델의 성능을 출력합니다.
-print(model.score(x_train, y_train))
-print(model.score(x_test, y_test))
-SyntaxError: multiple statements found while compiling a single statement
+
 >>> # score 함수를 사용하여 모델의 성능을 출력합니다.
 print(model.score(x_train, y_train))
 1.0
 >>> print(model.score(x_test, y_test))
 0.8032678295429455
->>> 
->>> 
+
+
+##다양한 분류 모델 학습
 >>> from sklearn.neighbors import KNeighborsClassifier
 >>> from sklearn.naive_bayes import MultinomialNB
 >>> from sklearn.naive_bayes import BernoulliNB
 >>> from sklearn.ensemble import RandomForestClassifier
 >>> from sklearn.svm import SVC
 >>> import xgboost as xgb
-Traceback (most recent call last):
-  File "<pyshell#81>", line 1, in <module>
-    import xgboost as xgb
-ModuleNotFoundError: No module named 'xgboost'
->>> import xgboost as xgb
 >>> from xgboost.sklearn import XGBClassifier
+
 >>> models = []
 >>> models.append(('KNN', KNeighborsClassifier()))  # KNN 모델
 >>> models.append(('NB-M', MultinomialNB()))  # 멀티노미얼 나이브 베이즈
@@ -292,12 +262,6 @@ RandomForestClassifier()
 RF - train_score : 1.000000, test score : 0.842129
 SVC(gamma='auto')
 SVM - train_score : 0.821996, test score : 0.806359
-
-Warning (from warnings module):
-  File "C:\Users\i\AppData\Local\Programs\Python\Python39\lib\site-packages\xgboost\sklearn.py", line 1224
-    warnings.warn(label_encoder_deprecation_msg, UserWarning)
-UserWarning: The use of label encoder in XGBClassifier is deprecated and will be removed in a future release. To remove this warning, do the following: 1) Pass option use_label_encoder=False when constructing XGBClassifier object; and 2) Encode your labels (y) as integers starting with 0, i.e. 0, 1, 2, ..., [num_class - 1].
-[20:09:52] WARNING: C:/Users/Administrator/workspace/xgboost-win64_release_1.5.0/src/learner.cc:1115: Starting in XGBoost 1.3.0, the default evaluation metric used with the objective 'binary:logistic' was changed from 'error' to 'logloss'. Explicitly set eval_metric if you'd like to restore the old behavior.
 XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
               colsample_bynode=1, colsample_bytree=1, enable_categorical=False,
               gamma=0, gpu_id=-1, importance_type=None,
@@ -319,40 +283,21 @@ XGB - train_score : 0.947659, test score : 0.872378
     word_importance.append(vectorizer.get_feature_names()[int(ytick[i].get_text().split('f')[1])])
 
     
-
-Warning (from warnings module):
-  File "C:\Users\i\AppData\Local\Programs\Python\Python39\lib\site-packages\sklearn\utils\deprecation.py", line 87
-    warnings.warn(msg, category=FutureWarning)
-FutureWarning: Function get_feature_names is deprecated; get_feature_names is deprecated in 1.0 and will be removed in 1.2. Please use get_feature_names_out instead.
 >>> ax.set_yticklabels(word_importance)
 [Text(0, 0, 'shame'), Text(0, 1, 'fits'), Text(0, 2, 'strange'), Text(0, 3, 'looked'), Text(0, 4, 'perfectly'), Text(0, 5, 'bad'), Text(0, 6, 'returned'), Text(0, 7, 'awful'), Text(0, 8, 'huge'), Text(0, 9, 'poor'), Text(0, 10, 'unfortunately'), Text(0, 11, 'compliments'), Text(0, 12, 'weird'), Text(0, 13, 'disappointing'), Text(0, 14, 'comfortable'), Text(0, 15, 'disappointed'), Text(0, 16, 'perfect'), Text(0, 17, 'returning'), Text(0, 18, 'unflattering'), Text(0, 19, 'cheap')]
+
 >>> plt.rcParams['figure.figsize'] = (10, 15)
 >>> plt.xlabel('The F-Score for each features')
 Text(0.5, 0, 'The F-Score for each features')
 >>> plt.ylabel('Importances')
 Text(0, 0.5, 'Importances')
 >>> plt.show()
->>> 
->>> 
->>> Q. 위 학습된 XGBClassifier 모델에서 feature importance가 30번째인 토큰을 문자열 형태로 구하세요.
-SyntaxError: invalid syntax
+
+
+
 >>> #  Q. 위 학습된 XGBClassifier 모델에서 feature importance가 30번째인 토큰을 문자열 형태로 구하세요.
 >>> # plot_importance() 함수의 인자 값을 조절하면 쉽게 구할 수 있습니다.
->>> 
->>> max_num_features = 30
-ax = xgb.plot_importance(models[-1][1], height = 1, grid = True, importance_type = 'gain', show_values = False, max_num_features = max_num_features)
-ytick = ax.get_yticklabels()
-word_importance = []
-for i in range(max_num_features):
-    word_importance.append(vectorizer.get_feature_names()[int(ytick[i].get_text().split('f')[1])])
 
-ax.set_yticklabels(word_importance)
-
-plt.rcParams['figure.figsize'] = (10, 15)
-plt.xlabel('The F-Score for each features')
-plt.ylabel('Importances')
-plt.show()
-SyntaxError: multiple statements found while compiling a single statement
 >>> max_num_features = 30
 >>> ax = xgb.plot_importance(models[-1][1], height = 1, grid = True, importance_type = 'gain', show_values = False, max_num_features = max_num_features)
 >>> ytick = ax.get_yticklabels()
@@ -369,13 +314,18 @@ Text(0.5, 0, 'The F-Score for each features')
 >>> plt.ylabel('Importances')
 Text(0, 0.5, 'Importances')
 >>> plt.show()
+
+
 >>> word_importance
 ['feminine', 'lay', 'dressed', 'jeans', 'casual', 'odd', 'hopes', 'excited', 'terrible', 'wanted', 'shame', 'fits', 'strange', 'looked', 'perfectly', 'bad', 'returned', 'awful', 'huge', 'poor', 'unfortunately', 'compliments', 'weird', 'disappointing', 'comfortable', 'disappointed', 'perfect', 'returning', 'unflattering', 'cheap']
 >>> # str형으로 문자열만 저장합니다. 예시: quiz_1 = 'cheap'
 quiz_1 = 'feminine'
->>> 
->>> 
+
+
+
+##평가 및 예측
 >>> from sklearn.metrics import confusion_matrix
+
 >>> # 의사결정나무 모델에 confusion matrix를 사용하기 위하여 테스트 데이터의 예측값을 저장합니다.
 model_predition = model.predict(x_test)
 >>> # sklearn에서 제공하는 confusion_matrix를 사용합니다.
@@ -392,6 +342,10 @@ Text(24.75, 0.5, 'Prediction')
 >>> cm
 array([[3522,  130],
        [ 448,  429]], dtype=int64)
+
+
+
+
 >>> # Q. XGBClassifier 모델에서 평가용 데이터(x_test, y_test)의 confusion matrix를 구하세요.
 >>> # XGBClassifier의 x_test에 대한 예측값을 구하고 confusion_matrix() 를 사용하면 confusion matrix를 구할 수 있습니다.
 >>> # 의사결정나무 모델에 confusion matrix를 사용하기 위하여 테스트 데이터의 예측값을 저장합니다.
@@ -403,21 +357,19 @@ quiz_2 = cm_xgb
 >>> quiz_2
 array([[3522,  130],
        [ 448,  429]], dtype=int64)
->>> 
->>> 
->>> 
->>> 
+
+
+##Precision & Recall
 >>> from sklearn.metrics import recall_score
 >>> from sklearn.metrics import precision_score
->>> 
-# sklearn에서 제공하는 recall_score, precision_score를 사용하여 recall과 precision 결과물을 출력합니다.
+>>> # sklearn에서 제공하는 recall_score, precision_score를 사용하여 recall과 precision 결과물을 출력합니다.
 >>> print("Recall score: {}".format(recall_score(y_test, model_predition)))
 Recall score: 0.48916761687571264
 >>> print("Precision score: {}".format(precision_score(y_test, model_predition)))
 Precision score: 0.7674418604651163
->>> # 0번부터 4번까지 5개를 출력해보겠습니다.
+  
+>>> #테스트 데이터의 예측값 출력!  0번부터 4번까지 5개를 출력해보겠습니다.
 for i in range(5): 
-    
     # 의사결정나무 모델을 사용하였습니다.
     prediction = model.predict(x_test[i])
     print("{} 번째 테스트 데이터 문장: \n{}".format(i, df_clean['Review Text'][i]))
