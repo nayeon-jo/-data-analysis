@@ -18,7 +18,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# pd.read_csv를 통하여 dataframe 형태로 읽어옵니다.
+# pd.read_csv를 통하여 dataframe 형태로 읽어온다
 corona_all=pd.read_csv("D:\pandas_jny\data\서울시 코로나19 확진자 현황.csv")
 corona_all.head()          # 상위 5개 데이터를 출력
 corona_all.info()          # dataframe 정보를 출력
@@ -45,7 +45,7 @@ corona_del_col.info()          # 정제 처리된 dataframe 정보를 출력
 
 """
 3. 데이터 시각화
-    corona_del_col 데이터를 바탕으로 각 column의 변수별로 어떠한 데이터 분포를 하고 있는지 시각화를 통하여 알아본다.
+    corona_del_col 데이터를 바탕으로 각 column의 변수별로 어떠한 데이터 분포를 하고 있는지 시각화를 통하여 알아본다
 """
 
 """
@@ -57,16 +57,16 @@ corona_del_col.info()          # 정제 처리된 dataframe 정보를 출력
 # `확진일` 데이터를 나누어     month, day column에 int64 형태로 저장  
 
 
-# dataframe에 추가하기 전, 임시로 데이터를 저장해 둘 list를 선언합니다.
+# dataframe에 추가하기 전, 임시로 데이터를 저장해 둘 list를 선언
 month = []
 day = []
 for data in corona_del_col['확진일']:
-    # split 함수를 사용하여 월, 일을 나누어 list에 저장합니다.
+    # split 함수를 사용하여 월, 일을 나누어 list에 저장
     month.append(data.split('.')[0])
     day.append(data.split('.')[1])
     
     
-# corona_del_col에 `month`, `day` column을 생성하며 동시에 list에 임시 저장된 데이터를 입력합니다.
+# corona_del_col에 `month`, `day` column을 생성하며 동시에 list에 임시 저장된 데이터를 입력
 corona_del_col['month'] = month
 corona_del_col['day'] = day
 
@@ -95,8 +95,8 @@ sns.set(style="darkgrid")
 ax = sns.countplot(x="month", data=corona_del_col, palette="Set3", order = order)
 
 
-# series의 plot 함수를 사용한 출력 방법도 있다.
-corona_del_col['month'].value_counts().plot(kind='bar')
+# series의 plot 함수를 사용한 출력 방법도 있다
+# corona_del_col['month'].value_counts().plot(kind='bar')
 
 
 # value_counts()는 각 데이터를 세어서 내림차순으로 정리하는 함수입니다.
@@ -109,14 +109,14 @@ corona_del_col['month'].value_counts()
     확진자 수가 가장 많았던 8월에 확진자 수가 어떻게 늘었는지 일별 확진자 수를 막대그래프로 출력
 """
 
-# 그래프에서 x축의 순서를 정리하기 위하여 order list를 생성합니다.
+# 그래프에서 x축의 순서를 정리하기 위하여 order list를 생성
 order2 = []
 for i in range(1,32):
     order2.append(str(i))
 order2
     
     
-# seaborn의 countplot 함수를 사용하여 출력합니다.
+# seaborn의 countplot 함수를 사용하여 출력
 plt.figure(figsize=(20,10))
 #sns.set(style="darkgrid")
 ax = sns.countplot(x="day", data=corona_del_col[corona_del_col['month'] == '8'], palette="rocket_r", order = order2)
@@ -133,7 +133,7 @@ corona_del_col[corona_del_col['month'] == '8']['day'].value_counts().mean()
 """
 
 corona_del_col['지역']
-#지역 데이터는 oo구 형태의 문자열 데이터이다.
+#지역 데이터는 oo구 형태의 문자열 데이터
 
 
 #지역별로 확진자가 얼마나 있는지 막대그래프로 출력
@@ -147,7 +147,7 @@ for font_file in font_files:
     
     
 plt.figure(figsize=(20,10))
-# 한글 출력을 위해서 폰트 옵션을 설정합니다.
+# 한글 출력을 위해서 폰트 옵션을 설정
 sns.set(font="NanumBarunGothic", 
        rc={"axes.unicode_minus":False},
        style='darkgrid')
@@ -160,11 +160,11 @@ ax = sns.countplot(x="지역", data=corona_del_col, palette="Set2")
     - 종랑구 -> 중랑구, 한국 -> 기타로 데이터를 변경
 """
 
-# replace 함수를 사용하여 해당 데이터를 변경합니다.
-# 이상치가 처리된 데이터이기에 새로운 Dataframe으로 저장합니다.
+# replace 함수를 사용하여 해당 데이터를 변경
+# 이상치가 처리된 데이터이기에 새로운 Dataframe으로 저장
 corona_out_region = corona_del_col.replace({'종랑구':'중랑구', '한국':'기타'})
 
-# 이상치가 처리된 데이터를 다시 출력해 봅시다.
+# 이상치가 처리된 데이터를 다시 출력
 plt.figure(figsize=(20,10))
 sns.set(font="NanumBarunGothic", 
         rc={"axes.unicode_minus":False},
@@ -198,7 +198,7 @@ ax = sns.countplot(x="지역", data=corona_out_region[corona_del_col['month'] ==
 # 해당 column을 지정하여 series 형태로 출력
 corona_out_region['month'][corona_out_region['지역'] == '관악구']
 
-# 그래프를 출력합니다.
+# 그래프를 출력
 plt.figure(figsize=(10,5))
 sns.set(style="darkgrid")
 ax = sns.countplot(x="month", data=corona_out_region[corona_out_region['지역'] == '관악구'], palette="Set2", order = order)
@@ -212,50 +212,50 @@ ax = sns.countplot(x="month", data=corona_out_region[corona_out_region['지역']
 # 지도 출력을 위한 라이브러리 folium을 import
 import folium
 
-# Map 함수를 사용하여 지도를 출력합니다.
+# Map 함수를 사용하여 지도를 출력
 map_osm = folium.Map(location=[37.529622, 126.984307], zoom_start=10)
 map_osm
 
 
 #지역마다 지도에 정보를 출력하기 위해서는 각 지역의 좌표정보가 필요
-# 서울시 행정구역 시군 정보 데이터를 불러와 사용합니다.
+# 서울시 행정구역 시군 정보 데이터를 불러와 사용
 
-# CRS에 저장합니다.
+# CRS에 저장
 CRS=pd.read_csv("D:\pandas_jny\data\서울시 행정구역 시군구 정보 (좌표계_ WGS1984).csv")
-# Dataframe을 출력해 봅니다.
+# Dataframe을 출력
 CRS
 
 
 CRS[CRS['시군구명_한글'] == '중구']     #저장된 데이터에서 지역명이 중구인 데이터를 뽑는다
 
 
-# corona_out_region의 지역에는 'oo구' 이외로 `타시도`, `기타`에 해당되는 데이터가 존재 합니다.
-# 위 데이터에 해당되는 위도, 경도를 찾을 수 없기에 삭제하여 corona_seoul로 저장합니다.
+# corona_out_region의 지역에는 'oo구' 이외로 `타시도`, `기타`에 해당되는 데이터가 존재 
+# 위 데이터에 해당되는 위도, 경도를 찾을 수 없기에 삭제하여 corona_seoul로 저장
 corona_seoul = corona_out_region.drop(corona_out_region[corona_out_region['지역'] == '타시도'].index)
 corona_seoul = corona_seoul.drop(corona_out_region[corona_out_region['지역'] == '기타'].index)
 
-# 서울 중심지 중구를 가운데 좌표로 잡아 지도를 출력합니다.
+# 서울 중심지 중구를 가운데 좌표로 잡아 지도를 출력
 map_osm = folium.Map(location=[37.557945, 126.99419], zoom_start=11)
 
 
 #for 문을 사용하여 지역마다 확진자를 원형 마커를 사용하여 지도에 출력
 
-# 지역 정보를 set 함수를 사용하여 25개 고유의 지역을 뽑아냅니다.
+# 지역 정보를 set 함수를 사용하여 25개 고유의 지역을 뽑아낸다
 for region in set(corona_seoul['지역']):
 
-    # 해당 지역의 데이터 개수를 count에 저장합니다.
+    # 해당 지역의 데이터 개수를 count에 저장
     count = len(corona_seoul[corona_seoul['지역'] == region])
-    # 해당 지역의 데이터를 CRS에서 뽑아냅니다.
+    # 해당 지역의 데이터를 CRS에서 뽑아냄
     CRS_region = CRS[CRS['시군구명_한글'] == region]
 
-    # CircleMarker를 사용하여 지역마다 원형마커를 생성합니다.
+    # CircleMarker를 사용하여 지역마다 원형마커를 생성
     marker = folium.CircleMarker([CRS_region['위도'], CRS_region['경도']], # 위치
                                   radius=count/10 + 10,                 # 범위
                                   color='#3186cc',            # 선 색상
                                   fill_color='#3186cc',       # 면 색상
                                   popup=' '.join((region, str(count), '명'))) # 팝업 설정
     
-    # 생성한 원형마커를 지도에 추가합니다.
+    # 생성한 원형마커를 지도에 추가
     marker.add_to(map_osm)
 
 map_osm
@@ -263,9 +263,8 @@ map_osm
 
 # 6월에 확진자가 가장 많이 나온 지역은?
 top=corona_out_region[corona_del_col['month'] == '6']['지역'].value_counts()
+top.index[0]
 
-quiz_2 = top.index[0]
-print(quiz_2)
 
 
 
